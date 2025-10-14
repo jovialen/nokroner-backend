@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: <%= ENV["POSTGRES_DB"] || "nokroner_db" %>
+  username: <%= ENV["POSTGRES_USER"] || "nokroner_db" %>
+  password: <%= ENV["POSTGRES_PASSWORD"] || "password" %>
+  host: <%= ENV["POSTGRES_HOST"] || "localhost" %>
+  port: <%= ENV["POSTGRES_PORT"] || "5432" %>
+
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
