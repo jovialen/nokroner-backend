@@ -1,9 +1,11 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
 
+  # GET /registration
   def new
   end
 
+  # POST /registration
   def create
     ActiveRecord::Base.transaction do
       @user = User.new(user_params)
@@ -21,6 +23,11 @@ class RegistrationsController < ApplicationController
     end
   rescue ActiveRecord::Rollback
     render json: { errors: 'User and Owner could not be saved. Try again later' }, status: :unprocessable_content
+  end
+
+  # DELETE /registration
+  def destroy
+    Current.user.destroy!
   end
 
   private
