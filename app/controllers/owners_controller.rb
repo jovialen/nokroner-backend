@@ -41,13 +41,14 @@ class OwnersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_owner
-      @owner = Owner.created_by_user.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def owner_params
-      params.expect(owner: [ :name, :net_worth ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_owner
+    @owner = Owner.created_by_user.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def owner_params
+    params.expect(owner: [ :name, :net_worth ])
+  end
 end

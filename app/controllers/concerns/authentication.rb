@@ -13,23 +13,24 @@ module Authentication
   end
 
   private
-    def require_authentication
-      resume_session || render_unauthorized
-    end
 
-    def resume_session
-      token = request.headers['Authorization']&.split(" ")&.last
-      Current.session = Session.find_by(token: token)
-    end
+  def require_authentication
+    resume_session || render_unauthorized
+  end
 
-    def refresh_session
-      if Current.session
-        Current.session.regenerate_token!
-        response.set_header("Authorization", "Bearer #{Current.session.token}")
-      end
-    end
+  def resume_session
+    token = request.headers['Authorization']&.split(' ')&.last
+    Current.session = Session.find_by(token: token)
+  end
 
-    def render_unauthorized
-      render json: { error: "Unauthorized" }, status: :unauthorized
+  def refresh_session
+    if Current.session
+      Current.session.regenerate_token!
+      response.set_header('Authorization', "Bearer #{Current.session.token}")
     end
+  end
+
+  def render_unauthorized
+    render json: { error: 'Unauthorized' }, status: :unauthorized
+  end
 end

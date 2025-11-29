@@ -40,13 +40,14 @@ class TransactionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_transaction
-      @transaction = Transaction.created_by_user.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def transaction_params
-      params.expect(transaction: [ :name, :amount, :from_account_id, :to_account_id ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_transaction
+    @transaction = Transaction.created_by_user.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def transaction_params
+    params.expect(transaction: [ :name, :amount, :from_account_id, :to_account_id ])
+  end
 end
