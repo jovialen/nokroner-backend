@@ -10,9 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_29_162454) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_29_170222) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "account_number"
+    t.float "balance"
+    t.datetime "created_at", null: false
+    t.float "interest"
+    t.string "name"
+    t.bigint "owner_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_accounts_on_owner_id"
+  end
+
+  create_table "owners", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "creator_id", null: false
+    t.string "name"
+    t.float "net_worth"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["creator_id"], name: "index_owners_on_creator_id"
+    t.index ["user_id"], name: "index_owners_on_user_id"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -27,12 +49,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_162454) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
-    t.string "first_name"
-    t.string "last_name"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "accounts", "owners"
+  add_foreign_key "owners", "users"
+  add_foreign_key "owners", "users", column: "creator_id"
   add_foreign_key "sessions", "users"
 end
