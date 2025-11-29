@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
 
   # GET /accounts
   def index
-    @accounts = Current.user.created_accounts
+    @accounts = Account.created_by_user
 
     render json: @accounts
   end
@@ -16,6 +16,7 @@ class AccountsController < ApplicationController
   # POST /accounts
   def create
     @account = Account.new(account_params)
+    @account.creator = Current.user
 
     if @account.save
       render json: @account, status: :created, location: @account
@@ -41,11 +42,11 @@ class AccountsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
-      @account = Current.user.created_accounts.find(params.expect(:id))
+      @account = Account.created_by_user.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def account_params
-      params.expect(account: [ :account_number, :name, :balance, :interest, :owner ])
+      params.expect(account: [ :account_number, :name, :balance, :interest, :owner_id ])
     end
 end

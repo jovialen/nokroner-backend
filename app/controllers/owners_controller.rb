@@ -3,7 +3,7 @@ class OwnersController < ApplicationController
 
   # GET /owners
   def index
-    @owners = Current.user.created_owners
+    @owners = Owner.created_by_user
 
     render json: @owners
   end
@@ -16,6 +16,8 @@ class OwnersController < ApplicationController
   # POST /owners
   def create
     @owner = Owner.new(owner_params)
+    @owner.creator = Current.user
+    @owner.is_user = false
 
     if @owner.save
       render json: @owner, status: :created, location: @owner
@@ -41,7 +43,7 @@ class OwnersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_owner
-      @owner = Current.user.created_owners.find(params.expect(:id))
+      @owner = Owner.created_by_user.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

@@ -18,16 +18,19 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_170222) do
     t.string "account_number"
     t.float "balance"
     t.datetime "created_at", null: false
+    t.bigint "creator_id", null: false
     t.float "interest"
     t.string "name"
-    t.bigint "owner_id", null: false
+    t.bigint "owner_id"
     t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_accounts_on_creator_id"
     t.index ["owner_id"], name: "index_accounts_on_owner_id"
   end
 
   create_table "owners", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "creator_id", null: false
+    t.boolean "is_user"
     t.string "name"
     t.float "net_worth"
     t.datetime "updated_at", null: false
@@ -57,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_170222) do
   end
 
   add_foreign_key "accounts", "owners"
+  add_foreign_key "accounts", "users", column: "creator_id"
   add_foreign_key "owners", "users"
   add_foreign_key "owners", "users", column: "creator_id"
   add_foreign_key "sessions", "users"

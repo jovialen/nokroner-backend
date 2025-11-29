@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resource :registration, only: [:new, :create, :destroy]
 
-  get "users/me" => "users#show"
+  get "user" => "users#show"
 
   # Application
   resources :owners
