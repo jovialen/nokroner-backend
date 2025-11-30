@@ -22,4 +22,27 @@ class Account < ApplicationRecord
   validates_with AccountOwnerValidator
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
+
+  def withdraw!(amount)
+    if amount <= 0
+      errors.add :base, 'amount must be greater than zero'
+      return false
+    end
+
+    if balance < amount
+      errors.add :balance, 'insufficient funds'
+      return false
+    end
+
+    update!(balance: balance - amount)
+  end
+
+  def deposit!(amount)
+    if amount <= 0
+      errors.add :base, 'amount must be greater than zero'
+      return false
+    end
+
+    update!(balance: balance + amount)
+  end
 end

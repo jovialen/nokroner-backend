@@ -53,13 +53,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
     t.float "amount"
     t.datetime "created_at", null: false
     t.bigint "creator_id", null: false
-    t.bigint "from_account_id_id", null: false
+    t.bigint "from_account_id", null: false
     t.string "name"
-    t.bigint "to_account_id_id", null: false
+    t.bigint "to_account_id", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_transactions_on_creator_id"
-    t.index ["from_account_id_id"], name: "index_transactions_on_from_account_id_id"
-    t.index ["to_account_id_id"], name: "index_transactions_on_to_account_id_id"
+    t.index ["from_account_id"], name: "index_transactions_on_from_account_id"
+    t.index ["to_account_id"], name: "index_transactions_on_to_account_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -77,7 +77,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
   add_foreign_key "owners", "users"
   add_foreign_key "owners", "users", column: "creator_id"
   add_foreign_key "sessions", "users"
-  add_foreign_key "transactions", "accounts", column: "from_account_id_id"
-  add_foreign_key "transactions", "accounts", column: "to_account_id_id"
+  add_foreign_key "transactions", "accounts", column: "from_account_id"
+  add_foreign_key "transactions", "accounts", column: "to_account_id"
   add_foreign_key "transactions", "users", column: "creator_id"
 end

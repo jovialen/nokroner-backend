@@ -1,0 +1,22 @@
+services:
+  database:
+    image: postgres:latest
+    env_file: ".env"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    env_file: ".env"
+    environment:
+      POSTGRES_HOST: database
+      RAILS_ENV: production
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+volumes:
+  db-data:
