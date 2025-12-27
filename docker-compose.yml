@@ -1,22 +1,22 @@
 services:
-  database:
-    image: postgres:latest
+  postgres:
+    image: postgres:16
     env_file: ".env"
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  backend:
+  rails:
     build: .
     env_file: ".env"
     environment:
-      POSTGRES_HOST: database
+      POSTGRES_HOST: postgres
       RAILS_ENV: production
     volumes:
       - .:/app
     ports:
       - "3000:3000"
     depends_on:
-      - database
+      - postgres
 
 volumes:
   db-data:

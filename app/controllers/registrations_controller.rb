@@ -1,5 +1,6 @@
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
+  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to sign_up_path, alert: "Try again later." }
 
   # GET /registration
   def new
@@ -8,7 +9,7 @@ class RegistrationsController < ApplicationController
   # POST /registration
   def create
     ActiveRecord::Base.transaction do
-      @user = User.new(user_params)
+      @user = User.new(registration_params)
       @owner = @user.build_owner(creator: @user, is_user: true)
 
       unless @user.save && @owner.save
@@ -32,7 +33,7 @@ class RegistrationsController < ApplicationController
 
   private
 
-  def user_params
+  def registration_params
     params.expect(user: [ :email_address, :password, :password_confirmation, :first_name, :last_name ])
   end
 end

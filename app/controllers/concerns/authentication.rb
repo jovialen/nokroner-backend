@@ -25,7 +25,7 @@ module Authentication
 
   def refresh_session
     if Current.session
-      Current.session.regenerate_token!
+      # Current.session.regenerate_token!
       response.set_header('Authorization', "Bearer #{Current.session.token}")
     end
   end

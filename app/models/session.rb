@@ -2,6 +2,8 @@ class Session < ApplicationRecord
   belongs_to :user
   before_create :generate_token
 
+  scope :created_by_user, ->() { where(user: Current.user) }
+
   def regenerate_token!
     generate_token
     save

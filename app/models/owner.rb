@@ -7,4 +7,8 @@ class Owner < ApplicationRecord
   validates :user, comparison: { equal_to: :creator }, allow_nil: true
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
+
+  def net_worth
+    self[:net_worth] || accounts.sum(:balance)
+  end
 end

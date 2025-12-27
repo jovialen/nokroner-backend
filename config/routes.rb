@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Authentication
-  resource :session
+  resources :sessions
   resources :passwords, param: :token
 
   resource :registration, only: [ :new, :create, :destroy ]

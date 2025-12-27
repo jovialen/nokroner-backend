@@ -32,7 +32,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
     t.bigint "creator_id", null: false
     t.boolean "is_user"
     t.string "name"
-    t.float "net_worth"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["creator_id"], name: "index_owners_on_creator_id"

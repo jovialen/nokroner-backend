@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  # GET /users/me
+  # GET /user
   def show
     @user = Current.user
     render json: @user

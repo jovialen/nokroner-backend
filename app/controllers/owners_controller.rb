@@ -4,13 +4,23 @@ class OwnersController < ApplicationController
   # GET /owners
   def index
     @owners = Owner.created_by_user
+      .left_joins(:accounts)
+      .select(
+        "owners.*,
+         COALESCE(SUM(accounts.balance), 0) AS net_worth"
+      )
+      .group("owners.id")
 
-    render json: @owners
+    render json: @owners.as_json(
+      methods: :net_worth
+    )
   end
 
   # GET /owners/1
   def show
-    render json: @owner
+    render json: @owner.as_json(
+      methods: :net_worth
+    )
   end
 
   # POST /owners
