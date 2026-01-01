@@ -32,6 +32,11 @@ class Transaction < ApplicationRecord
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
 
+  scope :recent, ->() { where(created_at: 31.days.ago..Time.current) }
+  scope :previous, ->() { where(created_at: 62.days.ago..31.days.ago) }
+  scope :this_month, ->() { where(created_at: Date.today.all_month) }
+  scope :last_month, ->() { where(created_at: Time.current.last_month.all_month) }
+
   private
     def make_transaction
       ActiveRecord::Base.transaction do

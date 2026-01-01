@@ -17,11 +17,33 @@ class Account < ApplicationRecord
 
   validates :account_number, presence: true
   validates :balance, comparison: { greater_than_or_equal_to: 0.0 }
-  validates :interest, comparison: { greater_than_or_equal_to: 0.0 }
+  validates :interest, comparison: { greater_than_or_equal_to: 1.0 }
 
   validates_with AccountOwnerValidator
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
+
+  def recent_income
+    self[:recent_income] || received_transactions.recent.sum(:amount)
+  end
+
+  def recent_expenses
+    self[:recent_expenses] || sent_transactions.recent.sum(:amount)
+  end
+  
+  def previous_income
+    self[:previous_income] || received_transactions.previous.sum(:amount)
+  end
+
+  def previous_expenses
+    self[:previous_expenses] || sent_transactions.previous.sum(:amount)
+  end
+
+  def balance_last_month
+    month_income = received_transactions.this_month.sum(:amount)
+    month_expenses = sent_transactions.this_month.sum(:amount)
+    self[:balance_last_month] || self[:balance] - month_income + month_expenses
+  end
 
   def withdraw!(amount)
     if amount <= 0

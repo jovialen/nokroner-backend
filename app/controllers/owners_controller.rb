@@ -19,7 +19,7 @@ class OwnersController < ApplicationController
   # GET /owners/1
   def show
     render json: @owner.as_json(
-      methods: :net_worth
+      methods: [ :net_worth, :net_worth_last_month, :recent_income, :recent_expenses, :previous_income, :previous_expenses ]
     )
   end
 

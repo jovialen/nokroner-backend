@@ -10,7 +10,9 @@ class AccountsController < ApplicationController
 
   # GET /accounts/1
   def show
-    render json: @account
+    render json: @account.as_json(
+      methods: [ :recent_expenses, :recent_income, :previous_expenses, :previous_income, :balance_last_month ]
+    )
   end
 
   # POST /accounts

@@ -10,7 +10,7 @@ class RegistrationsController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @user = User.new(registration_params)
-      @owner = @user.build_owner(creator: @user, is_user: true)
+      @owner = @user.build_owner(name: @user.full_name, creator: @user, is_user: true)
 
       unless @user.save && @owner.save
         raise ActiveRecord::Rollback
