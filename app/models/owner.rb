@@ -34,7 +34,8 @@ class Owner < ApplicationRecord
 
   MONEY_FLOW_PERIODS = {
     month: 'month',
-    week: 'week'
+    week: 'week',
+    day: 'day'
   }
 
   def money_flow(year, period)
@@ -61,6 +62,8 @@ class Owner < ApplicationRecord
       (1..12).map do |month| Date.new(year, month, 1) end
     when :week
       (1..Date.new(year).end_of_year.cweek).map do |week| Date.commercial(year, week, 1) end
+    when :day
+      Date.new(year).beginning_of_year..Time.current
     end
 
     summary = all_periodes.map do |p|
