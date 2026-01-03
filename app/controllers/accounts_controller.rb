@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
   # GET/accounts/1/money_flow
   def money_flow
     year = params.fetch(:year, Date.current.year).to_i
-    period = params.fetch(:period, "month").to_sym
+    period = params.fetch(:period, 'month').to_sym
 
     render json: {
       account_id: :id,

@@ -14,6 +14,6 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   def full_name
-    [self[:first_name], self[:last_name]].join(" ")
+    [ self[:first_name], self[:last_name] ].join(' ')
   end
 end

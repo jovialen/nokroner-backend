@@ -31,20 +31,22 @@ class Transaction < ApplicationRecord
   validates_with TransactionAccountsValidator
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
-  scope :internal, -> { 
+  scope :internal, -> {
     joins('INNER JOIN accounts AS from_accounts ON transactions.from_account_id = from_accounts.id')
     .joins('INNER JOIN accounts AS to_accounts ON transactions.to_account_id = to_accounts.id')
-    .where('from_accounts.owner_id = to_accounts.owner_id') }
-  scope :external, -> { 
+    .where('from_accounts.owner_id = to_accounts.owner_id')
+  }
+  scope :external, -> {
     joins('INNER JOIN accounts AS from_accounts ON transactions.from_account_id = from_accounts.id')
     .joins('INNER JOIN accounts AS to_accounts ON transactions.to_account_id = to_accounts.id')
-    .where('from_accounts.owner_id != to_accounts.owner_id') }
+    .where('from_accounts.owner_id != to_accounts.owner_id')
+  }
 
   scope :recent, ->() { where(transaction_date: 31.days.ago..Time.current) }
   scope :previous, ->() { where(transaction_date: 62.days.ago..31.days.ago) }
   scope :this_month, ->() { where(transaction_date: Date.today.all_month) }
   scope :last_month, ->() { where(transaction_date: Time.current.last_month.all_month) }
-  scope :year, ->(year) { where(transaction_date: Date.new(year).beginning_of_year..Date.new(year).end_of_year) }
+  scope :year, ->(year) { where(transaction_date: Date.new(year).all_year) }
 
   private
     def make_transaction

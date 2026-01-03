@@ -33,8 +33,8 @@ class Owner < ApplicationRecord
   end
 
   MONEY_FLOW_PERIODS = {
-    month: "month",
-    week: "week"
+    month: 'month',
+    week: 'week'
   }
 
   def money_flow(year, period)
@@ -72,7 +72,7 @@ class Owner < ApplicationRecord
       }
     end
 
-    return {
+    {
       total: {
         income: incoming.values.sum,
         expenses: outgoing.values.sum,
@@ -86,12 +86,12 @@ class Owner < ApplicationRecord
 
   HISTORY_PERIODS = {
     year: {
-      trunc: "year",
+      trunc: 'year',
       range: ->() { 10.years.ago.beginning_of_year..Date.current },
       count: 10
     },
     month: {
-      trunc: "month",
+      trunc: 'month',
       range: ->() { 12.months.ago.beginning_of_month..Date.current },
       count: 12
     }
@@ -117,11 +117,11 @@ class Owner < ApplicationRecord
       .where(transaction_date: range)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
-    
+
     history = []
     current_net_worth = net_worth
 
-    timestamps = (0..count).map do |i| 
+    timestamps = (0..count).map do |i|
       case period
       when :year then i.years.ago.beginning_of_year
       when :month then i.months.ago.beginning_of_month
@@ -137,6 +137,6 @@ class Owner < ApplicationRecord
       current_net_worth -= net_change
     end
 
-    return history.reverse
+    history.reverse
   end
 end

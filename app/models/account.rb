@@ -30,7 +30,7 @@ class Account < ApplicationRecord
   def recent_expenses
     self[:recent_expenses] || sent_transactions.external.recent.sum(:amount)
   end
-  
+
   def previous_income
     self[:previous_income] || received_transactions.external.previous.sum(:amount)
   end
@@ -44,10 +44,10 @@ class Account < ApplicationRecord
     month_expenses = sent_transactions.external.this_month.sum(:amount)
     self[:balance_last_month] || self[:balance] - month_income + month_expenses
   end
-  
+
   PERIODS = {
-    month: "month",
-    week: "week"
+    month: 'month',
+    week: 'week'
   }
 
   def money_flow(year, period)
@@ -60,7 +60,7 @@ class Account < ApplicationRecord
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
       .transform_keys { |date| date.to_date }
-      
+
     outgoing = Transaction
       .where(from_account_id: id)
       .external
@@ -85,7 +85,7 @@ class Account < ApplicationRecord
       }
     end
 
-    return {
+    {
       total: {
         income: incoming.values.sum,
         expenses: outgoing.values.sum,
