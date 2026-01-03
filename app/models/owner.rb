@@ -9,11 +9,15 @@ class Owner < ApplicationRecord
   scope :created_by_user, ->() { where(creator_id: Current.user) }
 
   def net_worth
-    self[:net_worth] || accounts.sum(:balance)
+    balance
   end
 
   def net_worth_last_month
     self[:net_worth_last_month] || accounts.sum(&:balance_last_month)
+  end
+
+  def balance
+    self[:balance] || accounts.sum(:balance)
   end
 
   def recent_income

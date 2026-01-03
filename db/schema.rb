@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_03_185436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -38,6 +38,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
     t.index ["user_id"], name: "index_owners_on_user_id"
   end
 
+  create_table "saving_goals", force: :cascade do |t|
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.boolean "realized"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_saving_goals_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -49,14 +59,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.string "name", null: false
     t.float "amount", null: false
-    t.date "transaction_date", null: false
-    t.bigint "from_account_id", null: false
-    t.bigint "to_account_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "creator_id", null: false
+    t.bigint "from_account_id", null: false
+    t.string "name", null: false
+    t.bigint "to_account_id", null: false
+    t.date "transaction_date", null: false
+    t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_transactions_on_creator_id"
     t.index ["from_account_id"], name: "index_transactions_on_from_account_id"
     t.index ["to_account_id"], name: "index_transactions_on_to_account_id"
@@ -76,6 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
   add_foreign_key "accounts", "users", column: "creator_id"
   add_foreign_key "owners", "users"
   add_foreign_key "owners", "users", column: "creator_id"
+  add_foreign_key "saving_goals", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "transactions", "accounts", column: "from_account_id"
   add_foreign_key "transactions", "accounts", column: "to_account_id"

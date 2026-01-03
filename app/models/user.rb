@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   has_one :owner, dependent: :destroy
   has_many :accounts, through: :owner
+  has_many :saving_goals, dependent: :destroy
 
   has_many :created_owners, class_name: 'Owner', foreign_key: 'creator_id', dependent: :destroy
   has_many :created_accounts, through: :created_owners, source: :accounts

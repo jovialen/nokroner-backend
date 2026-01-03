@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   end
 
   resources :transactions
+
+  resources :saving_goals
 end
