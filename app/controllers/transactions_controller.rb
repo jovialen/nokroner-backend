@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transactions = Transaction.created_by_user
+    @transactions = Transaction.created_by_user.order(:transaction_date)
 
     render json: @transactions
   end
