@@ -23,6 +23,10 @@ class Account < ApplicationRecord
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
 
+  def money_flow(year, period)
+    
+  end
+
   def recent_income
     self[:recent_income] || received_transactions.recent.sum(:amount)
   end

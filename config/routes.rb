@@ -11,7 +11,13 @@ Rails.application.routes.draw do
   get 'user' => 'users#show'
 
   # Application
-  resources :owners
-  resources :accounts
+  resources :owners do
+    get :money_flow, on: :member
+  end
+
+  resources :accounts do
+    get :money_flow, on: :member
+  end
+
   resources :transactions
 end

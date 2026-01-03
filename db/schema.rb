@@ -49,13 +49,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_223857) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.float "amount"
-    t.datetime "created_at", null: false
-    t.bigint "creator_id", null: false
+    t.string "name", null: false
+    t.float "amount", null: false
+    t.date "transaction_date", null: false
     t.bigint "from_account_id", null: false
-    t.string "name"
     t.bigint "to_account_id", null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "creator_id", null: false
     t.index ["creator_id"], name: "index_transactions_on_creator_id"
     t.index ["from_account_id"], name: "index_transactions_on_from_account_id"
     t.index ["to_account_id"], name: "index_transactions_on_to_account_id"
