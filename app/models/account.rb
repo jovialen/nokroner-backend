@@ -23,10 +23,6 @@ class Account < ApplicationRecord
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
 
-  def money_flow(year, period)
-    
-  end
-
   def recent_income
     self[:recent_income] || received_transactions.recent.sum(:amount)
   end
@@ -47,6 +43,56 @@ class Account < ApplicationRecord
     month_income = received_transactions.this_month.sum(:amount)
     month_expenses = sent_transactions.this_month.sum(:amount)
     self[:balance_last_month] || self[:balance] - month_income + month_expenses
+  end
+  
+  PERIODS = {
+    month: "month",
+    week: "week"
+  }
+
+  def money_flow(year, period)
+    trunc = PERIODS.fetch(period) { raise ArgumentError, "Invalid period #{period}" }
+
+    incoming = Transaction
+      .where(to_account_id: id)
+      .year(year)
+      .group("DATE_TRUNC('#{trunc}', transaction_date)")
+      .sum(:amount)
+      .transform_keys { |date| date.to_date }
+      
+    outgoing = Transaction
+      .where(from_account_id: id)
+      .year(year)
+      .group("DATE_TRUNC('#{trunc}', transaction_date)")
+      .sum(:amount)
+      .transform_keys { |date| date.to_date }
+
+    all_periodes = case period
+    when :month
+      (1..12).map do |month| Date.new(year, month, 1) end
+    when :week
+      (1..Date.new(year).end_of_year.cweek).map do |week| Date.commercial(year, week, 1) end
+    end
+
+    summary = all_periodes.map do |p|
+      {
+        period: p,
+        income: incoming[p] || 0,
+        expenses: outgoing[p] || 0,
+        net: (incoming[p] || 0) - (outgoing[p] || 0)
+      }
+    end
+
+    return {
+      total: {
+        income: incoming.values.sum,
+        expenses: outgoing.values.sum,
+        net: incoming.values.sum - outgoing.values.sum
+      },
+      incoming: incoming,
+      outgoing: outgoing,
+      all: summary
+    }
   end
 
   def withdraw!(amount)

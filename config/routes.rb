@@ -12,11 +12,16 @@ Rails.application.routes.draw do
 
   # Application
   resources :owners do
-    get :money_flow, on: :member
+    member do
+      get :money_flow
+      get :history
+    end
   end
 
   resources :accounts do
-    get :money_flow, on: :member
+    member do
+      get :money_flow
+    end
   end
 
   resources :transactions

@@ -1,5 +1,5 @@
 class OwnersController < ApplicationController
-  before_action :set_owner, only: %i[ show update destroy money_flow ]
+  before_action :set_owner, only: %i[ show update destroy money_flow history ]
 
   # GET /owners
   def index
@@ -22,61 +22,28 @@ class OwnersController < ApplicationController
       methods: [ :net_worth, :net_worth_last_month, :recent_income, :recent_expenses, :previous_income, :previous_expenses ]
     )
   end
-
-  PERIODS = {
-    month: "month",
-    week: "week"
-  }
   
   # GET /owners/1/money_flow
   def money_flow
     year = params.fetch(:year, Date.current.year).to_i
     period = params.fetch(:period, "month").to_sym
 
-    trunc = PERIODS.fetch(period) { raise ArgumentError, "Invalid period #{period}" }
-
-    incoming = Transaction
-      .where(to_account_id: @owner.accounts.select(:id))
-      .year(year)
-      .group("DATE_TRUNC('#{trunc}', transaction_date)")
-      .sum(:amount)
-      .transform_keys { |date| date.to_date }
-
-    outgoing = Transaction
-      .where(from_account_id: @owner.accounts.select(:id))
-      .year(year)
-      .group("DATE_TRUNC('#{trunc}', transaction_date)")
-      .sum(:amount)
-      .transform_keys { |date| date.to_date }
-
-    all_periodes = case period
-    when :month
-      (1..12).map do |month| Date.new(year, month, 1) end
-    when :week
-      (1..Date.new(year).end_of_year.cweek).map do |week| Date.commercial(year, week, 1) end
-    end
-
-    summary = all_periodes.map do |p|
-      {
-        period: p,
-        income: incoming[p] || 0,
-        expenses: outgoing[p] || 0,
-        net: (incoming[p] || 0) - (outgoing[p] || 0)
-      }
-    end
-
     render json: {
       owner_id: @owner.id,
       year: year,
       period: period,
-      total: {
-        income: incoming.values.sum,
-        expenses: outgoing.values.sum,
-        net: incoming.values.sum - outgoing.values.sum
-      },
-      incoming: incoming,
-      outgoing: outgoing,
-      all: summary
+      money_flow: @owner.money_flow(year, period)
+    }
+  end
+
+  # GET /owners/1/history
+  def history
+    period = params.fetch(:period, "month").to_sym
+
+    render json: {
+      owner_id: :id,
+      period: period,
+      history: @owner.history(period)
     }
   end
 
