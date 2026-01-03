@@ -42,6 +42,7 @@ class Owner < ApplicationRecord
 
     incoming = Transaction
       .where(to_account_id: accounts.select(:id))
+      .external
       .year(year)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
@@ -49,6 +50,7 @@ class Owner < ApplicationRecord
 
     outgoing = Transaction
       .where(from_account_id: accounts.select(:id))
+      .external
       .year(year)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
@@ -103,12 +105,14 @@ class Owner < ApplicationRecord
     count = config[:count]
 
     incoming = Transaction
+      .external
       .where(to_account_id: accounts.select(:id))
       .where(transaction_date: range)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
 
     outgoing = Transaction
+      .external
       .where(from_account_id: accounts.select(:id))
       .where(transaction_date: range)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")

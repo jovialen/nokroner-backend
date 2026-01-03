@@ -24,24 +24,24 @@ class Account < ApplicationRecord
   scope :created_by_user, ->() { where(creator_id: Current.user) }
 
   def recent_income
-    self[:recent_income] || received_transactions.recent.sum(:amount)
+    self[:recent_income] || received_transactions.external.recent.sum(:amount)
   end
 
   def recent_expenses
-    self[:recent_expenses] || sent_transactions.recent.sum(:amount)
+    self[:recent_expenses] || sent_transactions.external.recent.sum(:amount)
   end
   
   def previous_income
-    self[:previous_income] || received_transactions.previous.sum(:amount)
+    self[:previous_income] || received_transactions.external.previous.sum(:amount)
   end
 
   def previous_expenses
-    self[:previous_expenses] || sent_transactions.previous.sum(:amount)
+    self[:previous_expenses] || sent_transactions.external.previous.sum(:amount)
   end
 
   def balance_last_month
-    month_income = received_transactions.this_month.sum(:amount)
-    month_expenses = sent_transactions.this_month.sum(:amount)
+    month_income = received_transactions.external.this_month.sum(:amount)
+    month_expenses = sent_transactions.external.this_month.sum(:amount)
     self[:balance_last_month] || self[:balance] - month_income + month_expenses
   end
   
@@ -55,6 +55,7 @@ class Account < ApplicationRecord
 
     incoming = Transaction
       .where(to_account_id: id)
+      .external
       .year(year)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)
@@ -62,6 +63,7 @@ class Account < ApplicationRecord
       
     outgoing = Transaction
       .where(from_account_id: id)
+      .external
       .year(year)
       .group("DATE_TRUNC('#{trunc}', transaction_date)")
       .sum(:amount)

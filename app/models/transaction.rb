@@ -31,6 +31,14 @@ class Transaction < ApplicationRecord
   validates_with TransactionAccountsValidator
 
   scope :created_by_user, ->() { where(creator_id: Current.user) }
+  scope :internal, -> { 
+    joins('INNER JOIN accounts AS from_accounts ON transactions.from_account_id = from_accounts.id')
+    .joins('INNER JOIN accounts AS to_accounts ON transactions.to_account_id = to_accounts.id')
+    .where('from_accounts.owner_id = to_accounts.owner_id') }
+  scope :external, -> { 
+    joins('INNER JOIN accounts AS from_accounts ON transactions.from_account_id = from_accounts.id')
+    .joins('INNER JOIN accounts AS to_accounts ON transactions.to_account_id = to_accounts.id')
+    .where('from_accounts.owner_id != to_accounts.owner_id') }
 
   scope :recent, ->() { where(transaction_date: 31.days.ago..Time.current) }
   scope :previous, ->() { where(transaction_date: 62.days.ago..31.days.ago) }
