@@ -51,6 +51,6 @@ class SavingGoalsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def saving_goal_params
-      params.expect(saving_goal: [ :name, :amount, :realized ])
+      params.expect(saving_goal: [ :name, :amount, :realized, :archived ])
     end
 end
