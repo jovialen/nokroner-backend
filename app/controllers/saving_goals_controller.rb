@@ -6,14 +6,14 @@ class SavingGoalsController < ApplicationController
     @saving_goals = SavingGoal.created_by_user
 
     render json: @saving_goals.as_json(
-      methods: :saved
+      methods: [ :saved, :ready ]
     )
   end
 
   # GET /saving_goals/1
   def show
     render json: @saving_goal.as_json(
-      methods: :saved
+      methods: [ :saved, :ready ]
     )
   end
 

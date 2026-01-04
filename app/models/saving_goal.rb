@@ -15,4 +15,8 @@ class SavingGoal < ApplicationRecord
 
     (balance - allocated).clamp(0, amount)
   end
+
+  def ready
+    saved >= amount
+  end
 end
