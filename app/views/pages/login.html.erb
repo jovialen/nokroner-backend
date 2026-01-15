@@ -1,0 +1,22 @@
+<div>
+  <h1>Log In</h1>
+
+  <%= form_with url: api_v1_login_path, method: :post do |f| %>
+    <div>
+      <%= f.label :email_address, "Email Address" %>
+      <%= f.email_field :email_address, required: true, autofocus: true %>
+    </div>
+
+    <div>
+      <%= f.label :password, "Password" %>
+      <%= f.password_field :password, required: true %>
+    </div>
+
+    <%= f.submit "Log In" %>
+    <%= link_to "Back", home_path %>
+  <% end %>
+
+  <p>
+    Don't have an account? <%= link_to "Register here", register_path %>
+  </p>
+</div>

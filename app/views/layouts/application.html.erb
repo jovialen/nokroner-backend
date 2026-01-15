@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nokroner Backend</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+<% if flash[:alert] %>
+  <div><%= flash[:alert] %></div>
+<% end %>
+<% if flash[:notice] %>
+  <div><%= flash[:notice] %></div>
+<% end %>
+
+<%= yield %>
+</body>
+</html>

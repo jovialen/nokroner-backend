@@ -1,0 +1,21 @@
+<div>
+  <h1>Welcome to Nokroner Backend</h1>
+
+  <% if Current.session %>
+    <div>
+      <p><strong>Logged in as:</strong> <%= Current.user.email_address %></p>
+      <p><strong>Session created:</strong> <%= Current.session.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+    </div>
+
+    <%= form_with url: api_v1_logout_path, method: :delete, local: true do |f| %>
+      <%= f.submit "Log Out" %>
+    <% end %>
+  <% else %>
+    <p>Please log in or register to continue.</p>
+
+    <div>
+      <%= link_to "Log In", login_path %>
+      <%= link_to "Register", register_path %>
+    </div>
+  <% end %>
+</div>

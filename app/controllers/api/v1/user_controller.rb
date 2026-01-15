@@ -2,8 +2,6 @@ class Api::V1::UserController < ApplicationController
   allow_unauthenticated_access only: %i[ create ]
   before_action :set_user, only: [ :show, :destroy ]
 
-  include Registration
-
   def show
     render json: {
       email_address: @user.email_address,
@@ -13,7 +11,10 @@ class Api::V1::UserController < ApplicationController
   end
 
   def create
-    if register_new_user
+    @user = User.new(user_params)
+
+    if @user.save
+      start_new_session_for @user
       render json: { user: @user, api_token: Current.session.auth_token }
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -29,5 +30,9 @@ class Api::V1::UserController < ApplicationController
 
   def set_user
     @user = Current.user
+  end
+
+  def user_params
+    params.expect(user: [ :email_address, :password, :password_confirmation ])
   end
 end

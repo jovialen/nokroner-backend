@@ -43,7 +43,7 @@ module Authentication
   def request_authentication
     if browser_request?
       session[:after_authentication_url] = request.url
-      redirect_to "/register/new"
+      redirect_to "/login"
     else
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end
@@ -64,6 +64,10 @@ module Authentication
         same_site: :lax,
         expires: session.expires_at,
       }
+    end
+
+    if browser_request?
+      redirect_to session[:after_authentication_url]
     end
   end
 

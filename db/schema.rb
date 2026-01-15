@@ -14,7 +14,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_15_194239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "sessions", force: :cascade do |t|
+  create_table "pages", force: :cascade do |t|
     t.string "auth_token", null: false
     t.datetime "created_at", null: false
     t.datetime "expires_at"
@@ -34,5 +34,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_15_194239) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
-  add_foreign_key "sessions", "users"
+  add_foreign_key "pages", "users"
 end

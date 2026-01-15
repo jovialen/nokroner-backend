@@ -32,5 +32,9 @@ module NokronerBackend
     # Session middleware for authentication
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    # Middleware to allow Rails to process views
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.use Rack::MethodOverride
   end
 end
