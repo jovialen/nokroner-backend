@@ -8,7 +8,7 @@ class Api::V1::SessionsController < ApplicationController
 
       render json: Current.session unless browser_request?
     else
-      render json: { error: 'Invalid credentials' }, status: :unauthorized
+      render json: { error: "Invalid credentials" }, status: :unauthorized
     end
   end
 

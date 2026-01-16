@@ -66,9 +66,9 @@ module Authentication
       }
     end
 
-    if browser_request?
-      redirect_to session[:after_authentication_url]
-    end
+    url = session[:after_authentication_url] || "/"
+    session.delete(:after_authentication_url)
+    redirect_to url if browser_request?
   end
 
   def terminate_session

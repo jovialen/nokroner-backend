@@ -5,7 +5,7 @@
     <div>
       <p><strong>Logged in as:</strong> <%= Current.user.email_address %></p>
       <p><strong>Session created:</strong> <%= Current.session.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
-      <p><strong>Session expires:</strong> <%= Current.session.expires_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      <%= link_to "API", api_v1_me_path %>
     </div>
 
     <%= form_with url: api_v1_logout_path, method: :delete, local: true do |f| %>
