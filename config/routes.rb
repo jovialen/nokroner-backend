@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       # Profile information
       get "me/profile" => "profile#show"
       post "me/profile" => "profile#update"
+
+      # Owners
+      resources :owners
     end
   end
 end

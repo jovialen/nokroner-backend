@@ -3,5 +3,4 @@ class Owner < ApplicationRecord
   has_one :user, foreign_key: :owner_id
 
   scope :created_by_user, ->() { where(created_by: Current.user) }
-
 end
