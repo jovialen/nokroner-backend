@@ -1,13 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  first_name: MyString
-  last_name: MyString
-  date_of_birth: 2026-01-16
   user: one
+  first_name: John
+  last_name: Doe
+  date_of_birth: <%= 25.years.ago.to_date %>
 
 two:
-  first_name: MyString
-  last_name: MyString
-  date_of_birth: 2026-01-16
   user: two
+  first_name: Alice
+  last_name: Smith
+  date_of_birth: <%= 30.years.ago.to_date %>

@@ -1,9 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  name: MyString
+  name: Owner One
   created_by: one
 
 two:
-  name: MyString
+  name: Owner Two
+  created_by: one
+
+other_user_owner:
+  name: Other User Owner
   created_by: two

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="nokroner_dev_db" uuid="fffe41c8-b009-4e8f-8428-66cbfd8d14bb">
+    <data-source source="LOCAL" name="dev_db" uuid="2e73f661-20fc-437c-ad50-d6e618d338a9">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
