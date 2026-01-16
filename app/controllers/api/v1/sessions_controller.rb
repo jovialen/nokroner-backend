@@ -6,9 +6,7 @@ class Api::V1::SessionsController < ApplicationController
     if (user = User.authenticate_by(params.permit(:email_address, :password)))
       start_new_session_for user
 
-      unless browser_request?
-        render json: Current.session
-      end
+      render json: Current.session unless browser_request?
     else
       render json: { error: 'Invalid credentials' }, status: :unauthorized
     end

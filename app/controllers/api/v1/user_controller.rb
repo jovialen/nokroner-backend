@@ -15,7 +15,7 @@ class Api::V1::UserController < ApplicationController
 
     if @user.save
       start_new_session_for @user
-      render json: { user: @user, api_token: Current.session.auth_token }
+      render json: { user: @user, api_token: Current.session.auth_token } unless browser_request?
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
