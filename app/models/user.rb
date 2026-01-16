@@ -8,4 +8,29 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile
   validates :profile, presence: true
+
+  # Every user is also one owner
+  belongs_to :owner, optional: true
+  accepts_nested_attributes_for :owner
+  validates :owner, presence: true
+  before_validation :build_owner_if_needed, on: :create
+  before_validation :set_owner_name_from_profile, on: [ :create, :update ]
+
+  # Database data dependent on the user, and which should be deleted with the
+  # user if its deleted
+  has_many :owners, dependent: :destroy
+
+  private
+
+  def build_owner_if_needed
+    if owner.blank?
+      self.owner = Owner.new(created_by: self, name: profile.full_name)
+    end
+  end
+
+  def set_owner_name_from_profile
+    if owner.present? && profile.present?
+      owner.name = profile.full_name
+    end
+  end
 end
