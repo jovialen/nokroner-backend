@@ -33,6 +33,11 @@ class Api::V1::UserController < ApplicationController
   end
 
   def user_params
-    params.expect(user: [ :email_address, :password, :password_confirmation ])
+    params.expect(user: [
+      :email_address,
+      :password,
+      :password_confirmation,
+      profile_attributes: [ :first_name, :last_name, :date_of_birth ]
+    ])
   end
 end

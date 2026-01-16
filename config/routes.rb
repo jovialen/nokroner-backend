@@ -14,12 +14,16 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
-      # User authentication and management
+      # User authentication, registration and deletion
       post "login" => "sessions#create"
       delete "logout" => "sessions#destroy"
       post "register" => "user#create"
       get "me" => "user#show"
       delete "me" => "user#destroy"
+
+      # Profile information
+      get "me/profile" => "profile#show"
+      post "me/profile" => "profile#update"
     end
   end
 end
