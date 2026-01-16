@@ -29,11 +29,11 @@ module Authentication
   end
 
   def token_from_headers
-    header = request.headers['Authorization']
+    header = request.headers["Authorization"]
     return nil unless header
 
     pattern = /^Bearer /
-    header.gsub(pattern, '') if header.match(pattern)
+    header.gsub(pattern, "") if header.match(pattern)
   end
 
   def token_from_cookie
@@ -45,12 +45,12 @@ module Authentication
       session[:after_authentication_url] = request.url
       redirect_to "/login"
     else
-      render json: { error: 'Unauthorized' }, status: :unauthorized
+      render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
 
   def browser_request?
-    request.headers['Accept']&.include?('text/html') ||
+    request.headers["Accept"]&.include?("text/html") ||
       request.user_agent&.match?(/Mozilla|Chrome|Safari|Firefox/)
   end
 
@@ -62,7 +62,7 @@ module Authentication
         httponly: true,
         secure: Rails.env.production?,
         same_site: :lax,
-        expires: session.expires_at,
+        expires: session.expires_at
       }
     end
 

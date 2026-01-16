@@ -6,7 +6,7 @@ class Api::V1::UserController < ApplicationController
     render json: {
       email_address: @user.email_address,
       created_at: @user.created_at,
-      updated_at: @user.updated_at,
+      updated_at: @user.updated_at
     }
   end
 
