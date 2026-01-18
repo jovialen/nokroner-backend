@@ -1,6 +1,8 @@
 class Account < ApplicationRecord
   # Every account belongs to an owner
   belongs_to :owner
+
+  # And we can inherit the user which created the account from the owner it belongs to
   has_one :created_by, class_name: "User", through: :owner
 
   # And every account has many transactions either into or out of the account.
@@ -16,6 +18,10 @@ class Account < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :owner_id }
   validates :account_number, uniqueness: { scope: :owner_id }
 
+  # Ensure that the account is owned by an owner created by the current user.
+  # We don't want to allow anyone to create accounts for other users owners.
+  validate :check_owner_created_by_user
+
   # We also want to be able to quickly get all accounts created by the current
   # user
   scope :created_by_user, ->() { left_joins(:owner).where("created_by_id = ?", Current.user.id) }
@@ -24,5 +30,25 @@ class Account < ApplicationRecord
   # in or out
   def transactions
     Transaction.where("from_account_id = ? OR to_account_id = ?", id, id)
+  end
+
+  # The following utility functions are utilized by the transaction model in
+  # order to simplify its logic
+  def withdraw!(amount)
+    amount = BigDecimal(amount.to_s)
+    decrement!(:balance, amount)
+  end
+
+  def deposit!(amount)
+    amount = BigDecimal(amount.to_s)
+    increment!(:balance, amount)
+  end
+
+  private
+
+  def check_owner_created_by_user
+    if owner.created_by != Current.user
+      errors.add(:owner, "does not belong to the current user")
+    end
   end
 end

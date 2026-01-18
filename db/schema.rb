@@ -58,9 +58,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_125443) do
     t.decimal "amount", null: false
     t.datetime "created_at", null: false
     t.bigint "created_by_id", null: false
-    t.bigint "from_account_id", null: false
+    t.boolean "external", null: false
+    t.bigint "from_account_id"
     t.string "name"
-    t.bigint "to_account_id", null: false
+    t.bigint "to_account_id"
     t.date "transaction_date", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_transactions_on_created_by_id"

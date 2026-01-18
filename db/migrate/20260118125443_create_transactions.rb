@@ -3,9 +3,10 @@ class CreateTransactions < ActiveRecord::Migration[8.1]
     create_table :transactions do |t|
       t.string :name
       t.decimal :amount, null: false
-      t.references :from_account, null: false, foreign_key: { to_table: :accounts }
-      t.references :to_account, null: false, foreign_key: {  to_table: :accounts }
+      t.references :from_account, null: true, foreign_key: { to_table: :accounts }
+      t.references :to_account, null: true, foreign_key: {  to_table: :accounts }
       t.date :transaction_date, null: false
+      t.boolean :external, null: false
       t.belongs_to :created_by, null: false, foreign_key: { to_table: :users }
 
       t.timestamps
