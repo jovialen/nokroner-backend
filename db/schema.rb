@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_16_094007) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_16_232056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "account_number"
+    t.decimal "balance", default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "owner_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_accounts_on_owner_id"
+  end
 
   create_table "owners", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -54,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_094007) do
     t.index ["owner_id"], name: "index_users_on_owner_id"
   end
 
+  add_foreign_key "accounts", "owners"
   add_foreign_key "owners", "users", column: "created_by_id"
   add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"

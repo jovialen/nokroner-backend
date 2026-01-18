@@ -26,7 +26,15 @@ Rails.application.routes.draw do
       patch "me/profile" => "profile#update"
 
       # Owners
-      resources :owners
+      resources :owners do
+        # Accounts belong exclusively to a single owner, so it makes sense to
+        # be able to easily get the accounts for a specific owner.
+        resources :accounts
+      end
+
+      # However, it should also be possible to query all accounts regardless of
+      # the owner
+      resources :accounts
     end
   end
 end
