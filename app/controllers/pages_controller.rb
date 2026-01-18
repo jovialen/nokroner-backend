@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   include Rails.application.routes.url_helpers
 
   append_view_path Rails.root.join("app", "views")
-  helper_method :login_path, :home_path, :register_path, :api_v1_login_path, :api_v1_logout_path, :api_v1_register_path
+  helper_method :login_path, :home_path, :docs_path, :register_path, :api_v1_login_path, :api_v1_logout_path, :api_v1_register_path
   layout "application"
 
   def home

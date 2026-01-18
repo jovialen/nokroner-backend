@@ -1,22 +1,82 @@
 <div>
-  <h1>Welcome to Nokroner Backend</h1>
+  <header>
+    <nav>
+      <ul>
+        <% if Current.session %>
+          <li>
+            <%= form_with url: api_v1_logout_path, method: :delete, local: true do |f| %>
+              <%= f.submit "Log out" %>
+            <% end %>
+          </li>
+          <li><%= link_to "API", api_v1_me_path %></li>
+        <% else %>
+          <%= link_to "Log In", login_path %>
+          <%= link_to "Register", register_path %>
+        <% end %>
 
-  <% if Current.session %>
-    <div>
+        <li id="title"><%= link_to "Nokroner", home_path %></li>
+
+        <li><%= link_to "Docs", docs_path %></li>
+        <li><%= link_to "Github", "https://github.com/jovialen/nokroner-backend" %></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <% if Current.session %>
       <p><strong>Logged in as:</strong> <%= Current.user.email_address %></p>
       <p><strong>Session created:</strong> <%= Current.session.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
-      <%= link_to "API", api_v1_me_path %>
-    </div>
-
-    <%= form_with url: api_v1_logout_path, method: :delete, local: true do |f| %>
-      <%= f.submit "Log Out" %>
+    <% else %>
+      <p>Please log in or register to continue.</p>
     <% end %>
-  <% else %>
-    <p>Please log in or register to continue.</p>
-
-    <div>
-      <%= link_to "Log In", login_path %>
-      <%= link_to "Register", register_path %>
-    </div>
-  <% end %>
+  </main>
 </div>
+
+<style>
+  header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 50px;
+      border-bottom: 1px solid grey;
+  }
+
+  nav > ul {
+      list-style-type: none;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      gap: 2.00rem;
+  }
+
+  input[type="submit"] {
+      display: inline-block;
+      background: none;
+      border: none;
+      padding: 0;
+  }
+
+  a, input[type="submit"] {
+      color: dimgrey;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+  }
+
+  a:hover, input[type="submit"]:hover {
+      text-decoration: underline;
+  }
+
+  #title > a {
+      color: black;
+  }
+
+  #title > a:hover {
+      text-decoration: none;
+  }
+
+  main {
+      margin: 0.5rem;
+  }
+</style>

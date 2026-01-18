@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Add automatically generated API documentation on /docs, curtesy of the
+  # OasRails gem
+  mount OasRails::Engine => "/docs", as: :docs
+
+  # Home page
   root "pages#home", as: :home
 
   # User identification and authentication
