@@ -8,8 +8,8 @@ class Account < ApplicationRecord
   # And every account has many transactions either into or out of the account.
   # These transactions are not dependent on either account, since either one
   # should potentially could be destroyed without affecting the other one.
-  has_many :sent_transactions, class_name: "Transaction", foreign_key: :from_account_id
-  has_many :received_transactions, class_name: "Transaction", foreign_key: :to_account_id
+  has_many :sent_transactions, class_name: "Transaction", foreign_key: :from_account_id, dependent: :nullify
+  has_many :received_transactions, class_name: "Transaction", foreign_key: :to_account_id, dependent: :nullify
 
   # The name and account number of the account should also be unique on a
   # per-user basis. Optimally, the account number should be unique for an

@@ -42,6 +42,10 @@ class Transaction < ApplicationRecord
   # we don't need to keep track of transactions that don't involve the user
   validate :transaction_involves_user
 
+  # Also confirm that both accounts are created by the current user, as we do
+  # not want to allow creating transactions for other users.
+  validate :accounts_are_created_by_user
+
   # We need to know which user created the transaction, so that the transaction
   # can be destroyed together with the user if the user is destroyed. Since it
   # should be possible to destroy either one of the accounts the transaction
@@ -92,8 +96,8 @@ class Transaction < ApplicationRecord
   def undo_transaction
     # See previous comment
     ActiveRecord::Base.transaction do
-      from_account.deposit!(amount) if from_account.present?
-      to_account.withdraw!(amount) if to_account.present?
+      from_account.deposit!(amount_was || amount) if from_account.present?
+      to_account.withdraw!(amount_was || amount) if to_account.present?
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
       errors.add(:base, "failed to undo transaction: #{e.message}")
       raise ActiveRecord::Rollback
@@ -126,6 +130,11 @@ class Transaction < ApplicationRecord
     if !user_owns_from_account && !user_owns_to_account
       errors.add(:base, "neither to or from account belongs to the user")
     end
+  end
+
+  def accounts_are_created_by_user
+    errors.add(:from_account_id, "must be created by the user") if from_account.present? && from_account.created_by != Current.user
+    errors.add(:to_account_id, "must be created by the user") if to_account.present? && to_account.created_by != Current.user
   end
 
   def check_if_external

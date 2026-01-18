@@ -1,0 +1,44 @@
+internal_transfer:
+  name: Internal Transfer
+  amount: 200.00
+  from_account: checking
+  to_account: savings
+  transaction_date: <%= 2.days.ago.to_date %>
+  created_by: one
+  external: false
+
+expense:
+  name: Grocery Shopping
+  amount: 75.50
+  from_account: checking
+  to_account:
+  transaction_date: <%= 1.day.ago.to_date %>
+  created_by: one
+  external: true
+
+income:
+  name: Salary Payment
+  amount: 2500.00
+  from_account:
+  to_account: checking
+  transaction_date: <%= 5.days.ago.to_date %>
+  created_by: one
+  external: true
+
+external_transfer:
+  name: Transfer Between Owners
+  amount: 100.00
+  from_account: checking
+  to_account: other_owner_account
+  transaction_date: <%= 3.days.ago.to_date %>
+  created_by: one
+  external: true
+
+other_user_transaction:
+  name: Other User Transaction
+  amount: 50.00
+  from_account: other_user_account
+  to_account:
+  transaction_date: <%= 1.day.ago.to_date %>
+  created_by: two
+  external: true

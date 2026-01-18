@@ -45,7 +45,11 @@ class Api::V1::TransactionsController < ApplicationController
   # @response Success(200) [!Transaction]
   # @response Invalid input(422) [!Hash{ errors: Array<String> }]
   def update
-    @transaction.update(transaction_params)
+    if @transaction.update(transaction_params)
+      render json: @transaction
+    else
+      render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   # @summary Destroy a transaction

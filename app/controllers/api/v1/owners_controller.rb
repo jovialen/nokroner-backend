@@ -10,7 +10,8 @@ class Api::V1::OwnersController < ApplicationController
   end
 
   def create
-    @owner = Current.user.owners.new(owner_params)
+    @owner = Owner.new(owner_params)
+    @owner.created_by = Current.user
 
     if @owner.save
       render json: @owner, status: :created, location: api_v1_owner_path(@owner)
@@ -28,8 +29,12 @@ class Api::V1::OwnersController < ApplicationController
   end
 
   def destroy
-    @owner.destroy
-    head(:ok)
+    unless Current.user.owner == @owner
+      @owner.destroy
+      head(:ok)
+    else
+      render json: { error: "cannot delete user owner. delete user instead" }, status: :bad_request
+    end
   end
 
   private

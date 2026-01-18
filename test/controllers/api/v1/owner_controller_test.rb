@@ -91,7 +91,7 @@ class Api::V1::OwnersControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy owner" do
     assert_difference("Owner.count", -1) do
-      delete api_v1_owner_path(owners(:one)), as: :json
+      delete api_v1_owner_path(owners(:two)), as: :json
       assert_response :ok
     end
   end

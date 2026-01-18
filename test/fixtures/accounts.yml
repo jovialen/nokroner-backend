@@ -1,13 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-  account_number: MyString
-  balance: 9.99
+checking:
+  name: Checking Account
+  account_number: "1234567890"
+  balance: 1000.00
   owner: one
 
-two:
-  name: MyString
-  account_number: MyString
-  balance: 9.99
+savings:
+  name: Savings Account
+  account_number: "0987654321"
+  balance: 5000.00
+  owner: one
+
+other_owner_account:
+  name: Other Owner Account
+  account_number: "1111111111"
+  balance: 2000.00
   owner: two
+
+other_user_account:
+  name: Other User Account
+  account_number: "2222222222"
+  balance: 3000.00
+  owner: other_user_owner

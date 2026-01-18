@@ -43,9 +43,9 @@ Rails.application.routes.draw do
         # It should also be possible to get transactions relevant to an account
         # through its route
         member do
-          get "transactions" => "accounts#transactions"
-          get "transactions/sent" => "accounts#sent"
-          get "transactions/received" => "accounts#received"
+          get "transactions" => "accounts#transactions", as: :transactions
+          get "transactions/sent" => "accounts#sent", as: :sent_transactions
+          get "transactions/received" => "accounts#received", as: :received_transactions
         end
       end
 
