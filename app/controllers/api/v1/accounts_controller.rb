@@ -1,15 +1,26 @@
 class Api::V1::AccountsController < ApplicationController
   before_action :set_owner, only: %i[ index create ]
-  before_action :set_account, only: %i[ show update destroy ]
+  before_action :set_account, only: %i[ show update destroy sent received transactions ]
 
+  # @summary List accounts
+  # @auth [bearer, api_key_cookie]
   def index
     render json: @owner ? @owner.accounts : Account.created_by_user
   end
 
+  # @summary Show account
+  # @auth [bearer, api_key_cookie]
+  #
+  # @parameter id(path) [Integer] Used for identifying the account.
   def show
     render json: @account
   end
 
+  # @summary Create account
+  # @auth [bearer, api_key_cookie]
+  #
+  # @request_body The account to be created. [!Hash{ account: !Hash{ name: String, account_number: String, balance: Float, owner_id: Integer } }]
+  # @request_body_example Example account [{ account: { name: "My account", account_number: "1234 56 78900", balance: 0, owner_id: 1 } }]
   def create
     @account = @owner ? @owner.accounts.build(account_params) : Account.new(account_params)
 
@@ -20,6 +31,12 @@ class Api::V1::AccountsController < ApplicationController
     end
   end
 
+  # @summary Update account
+  # @auth [bearer, api_key_cookie]
+  #
+  # @parameter id(path) [Integer] Used for identifying the account.
+  # @request_body The account to be created. [!Hash{ account: !Hash{ name: String, account_number: String, balance: Float, owner_id: Integer } }]
+  # @request_body_example Example account [{ account: { name: "New name" } }]
   def update
     if @account.update(account_params)
       render json: @account
@@ -28,9 +45,28 @@ class Api::V1::AccountsController < ApplicationController
     end
   end
 
+  # @summary Destroy account
+  # @auth [bearer, api_key_cookie]
+  #
+  # @parameter id(path) [Integer] Used for identifying the account.
   def destroy
     @account.destroy
     head(:ok)
+  end
+
+  # @summary Transactions from account
+  def sent
+    render json: @account.sent_transactions
+  end
+
+  # @summary Transactions to account
+  def received
+    render json: @account.received_transactions
+  end
+
+  # @summary Account transactions
+  def transactions
+    render json: @account.transactions
   end
 
   private
@@ -41,7 +77,7 @@ class Api::V1::AccountsController < ApplicationController
 
   def set_account
     set_owner
-    accounts = @owner ? @owner.accounts : Owner.created_by_user
+    accounts = (@owner ? @owner.accounts : Account.created_by_user)
     @account = accounts.find(params[:id])
   end
 

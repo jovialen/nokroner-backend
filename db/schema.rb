@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_16_232056) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_18_125443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_232056) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.decimal "amount", null: false
+    t.datetime "created_at", null: false
+    t.bigint "created_by_id", null: false
+    t.bigint "from_account_id", null: false
+    t.string "name"
+    t.bigint "to_account_id", null: false
+    t.date "transaction_date", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_transactions_on_created_by_id"
+    t.index ["from_account_id"], name: "index_transactions_on_from_account_id"
+    t.index ["to_account_id"], name: "index_transactions_on_to_account_id"
+    t.index ["transaction_date"], name: "index_transactions_on_transaction_date"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -68,5 +83,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_232056) do
   add_foreign_key "owners", "users", column: "created_by_id"
   add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "transactions", "accounts", column: "from_account_id"
+  add_foreign_key "transactions", "accounts", column: "to_account_id"
+  add_foreign_key "transactions", "users", column: "created_by_id"
   add_foreign_key "users", "owners"
 end

@@ -10,8 +10,7 @@ class Api::V1::OwnersController < ApplicationController
   end
 
   def create
-    @owner = Owner.new(owner_params)
-    @owner.created_by = Current.user
+    @owner = Current.user.owners.new(owner_params)
 
     if @owner.save
       render json: @owner, status: :created, location: api_v1_owner_path(@owner)

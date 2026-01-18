@@ -39,7 +39,18 @@ Rails.application.routes.draw do
 
       # However, it should also be possible to query all accounts regardless of
       # the owner
-      resources :accounts
+      resources :accounts do
+        # It should also be possible to get transactions relevant to an account
+        # through its route
+        member do
+          get "transactions" => "accounts#transactions"
+          get "transactions/sent" => "accounts#sent"
+          get "transactions/received" => "accounts#received"
+        end
+      end
+
+      # While also having a common route for all transactions
+      resources :transactions
     end
   end
 end

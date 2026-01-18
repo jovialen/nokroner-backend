@@ -19,6 +19,7 @@ class User < ApplicationRecord
   # Database data dependent on the user, and which should be deleted with the
   # user if its deleted
   has_many :owners, dependent: :destroy
+  has_many :transactions, dependent: :destroy
 
   private
 
