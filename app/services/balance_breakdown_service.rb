@@ -1,5 +1,6 @@
 class BalanceBreakdownService
   VALID_PERIODS = [ :week, :month, :quarter, :year ]
+  TRUNC_PERIODS = { week: "week", month: "month", quarter: "quarter", year: "year" }
 
   def initialize(accounts)
     @accounts = accounts
@@ -14,7 +15,7 @@ class BalanceBreakdownService
     validate_input!(start_date, end_date, period)
 
     # Parse the input
-    trunc = period.to_s
+    trunc = TRUNC_PERIODS[period]
 
     # We need to know what the balance was at the end of the given time range,
     # since we are only working with the net change throughout, not the actual
