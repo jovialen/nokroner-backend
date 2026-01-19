@@ -79,8 +79,6 @@ class Transaction < ApplicationRecord
   private
 
   def perform_transaction
-    Rails.logger.info "Performing transaction: #{amount} from #{from_account&.id} to #{to_account&.id}"
-
     # Only apply the transaction if we succeed both at withdrawing the amount
     # from one account and then depositing it. This ensures that no database
     # errors either create or destroy money.

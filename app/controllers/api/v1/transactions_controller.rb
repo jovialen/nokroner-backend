@@ -5,7 +5,7 @@ class Api::V1::TransactionsController < ApplicationController
   # @auth [bearer, api_key_cookie]
   # @response Success(200) [Array<!Transaction>]
   def index
-    render json: Transaction.created_by_user
+    render json: Transaction.created_by_user.order(:transaction_date, :created_at)
   end
 
   # @summary View a transaction

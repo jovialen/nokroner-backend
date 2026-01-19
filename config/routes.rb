@@ -35,17 +35,25 @@ Rails.application.routes.draw do
         # Accounts belong exclusively to a single owner, so it makes sense to
         # be able to easily get the accounts for a specific owner.
         resources :accounts
+
+        member do
+          get "history" => "owners#history", as: :history
+        end
       end
 
       # However, it should also be possible to query all accounts regardless of
       # the owner
       resources :accounts do
-        # It should also be possible to get transactions relevant to an account
-        # through its route
         member do
+          # It should also be possible to get transactions relevant to an
+          # account through its route
           get "transactions" => "accounts#transactions", as: :transactions
           get "transactions/sent" => "accounts#sent", as: :sent_transactions
           get "transactions/received" => "accounts#received", as: :received_transactions
+
+          # These routes are used for calculating interesting statistics for
+          # the account
+          get "history" => "accounts#history", as: :history
         end
       end
 

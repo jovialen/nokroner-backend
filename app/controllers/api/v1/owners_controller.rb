@@ -1,5 +1,5 @@
 class Api::V1::OwnersController < ApplicationController
-  before_action :set_owner, only: %i[ show update destroy ]
+  before_action :set_owner, only: %i[ show update destroy history ]
 
   # @summary List owners.
   # @auth [bearer, api_key_cookie]
@@ -71,6 +71,27 @@ class Api::V1::OwnersController < ApplicationController
     else
       render json: { error: "cannot delete user owner. delete user instead" }, status: :bad_request
     end
+  end
+
+  # @summary Balance history of the owner
+  # Calculate the sum balance of all the user accounts during a user defined
+  # period.
+  #
+  # @parameter id(path) [Integer] Used for identifying the owner
+  # @parameter start_date(query) [Date] Where to start calculating history from
+  # @parameter end_date(query) [Date] Where to end calculating history from
+  # @parameter period(query) [String] default: (quarter) enum: (week,month,quarter,year)
+  # @response Success(200) [Array<!Hash{ period_start: Date, period_end: Date, income: String, expenses: String, net_change: String, initial_balance: String, end_balance: String }>]
+  def history
+    start_date = params[:start_date].to_date if params[:start_date]
+    end_date   = params[:end_date].to_date   if params[:end_date]
+    period     = params.fetch(:period, "quarter").to_sym
+
+    render json: BalanceBreakdownQuery.new(accounts: @owner.accounts)
+                                      .start_date(start_date)
+                                      .end_date(end_date)
+                                      .grouped_by(period)
+                                      .execute
   end
 
   private
