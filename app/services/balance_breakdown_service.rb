@@ -57,9 +57,15 @@ class BalanceBreakdownService
     start_date = all_start_periods.min.public_send("beginning_of_#{trunc}") unless start_date
     end_date   = all_start_periods.max.public_send("end_of_#{trunc}")       unless end_date
 
+    # TODO: Prevent the start date from being automatically set after the end
+    #       date, or the other way round.
+    # TODO: Limit the duration of the period which can be requested
+    # TODO: Prevent the start date or end date from being set in a way that
+    #       creates an excessively long period.
+
     breakdown = generate_periods(start_date, end_date, period).reverse.map do | p |
-      period_sent = sent[p[:start]] || 0
-      period_received = received[p[:start]] || 0
+      period_sent = sent[p[:start]] || BigDecimal(0)
+      period_received = received[p[:start]] || BigDecimal(0)
       net_change = period_received - period_sent
 
       # We are working backwards from the end date, so the current balance must
