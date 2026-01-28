@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_100920) do
   create_table "saving_goals", force: :cascade do |t|
     t.decimal "amount", null: false
     t.boolean "archived", default: false
+    t.boolean "autocomplete", default: false, null: false
     t.datetime "created_at", null: false
     t.boolean "done", default: false
     t.string "name", null: false

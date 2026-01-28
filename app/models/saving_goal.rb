@@ -14,6 +14,9 @@ class SavingGoal < ApplicationRecord
   # unless they actually have the funds for it
   validate :has_enough_saved, on: [ :create, :update ]
 
+  # If the goal can be autocompleted, we want to do so before saving.
+  before_validation :autocomplete_if_possible
+
   # These scopes are also just generally useful
   scope :created_by_user, ->() { where(user: Current.user) }
   scope :completed, ->() { where(done: true) }
@@ -39,6 +42,12 @@ class SavingGoal < ApplicationRecord
   # Takes the saving goal amount and subtracts the saved amount.
   def remaining
     amount - saved
+  end
+
+  # @summary If the saving goal is ready to be completed.
+  # @return True if the required amount has been saved
+  def ready
+    saved >= amount
   end
 
   # @summary How much the user must save every day to meet the goal by the target date.
@@ -76,6 +85,12 @@ class SavingGoal < ApplicationRecord
               .created_by_user
               .completed
               .sum(:amount)
+  end
+
+  def autocomplete_if_possible
+    if autocomplete && ready
+      self.done = true
+    end
   end
 
   def has_enough_saved

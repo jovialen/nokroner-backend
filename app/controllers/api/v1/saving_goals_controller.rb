@@ -64,6 +64,6 @@ class Api::V1::SavingGoalsController < ApplicationController
   end
 
   def saving_goal_params
-    params.expect(saving_goal: [ :name, :amount, :done, :archived, :target_date ])
+    params.expect(saving_goal: [ :name, :amount, :autocomplete, :done, :archived, :target_date ])
   end
 end

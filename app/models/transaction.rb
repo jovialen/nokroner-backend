@@ -85,6 +85,7 @@ class Transaction < ApplicationRecord
     ActiveRecord::Base.transaction do
       from_account.withdraw!(amount) if from_account.present?
       to_account.deposit!(amount) if to_account.present?
+      SavingGoalAutocompleteJob.perform_later Current.user
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
       errors.add(:base, "failed to perform transaction: #{e.message}")
       raise ActiveRecord::Rollback

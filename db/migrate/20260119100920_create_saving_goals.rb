@@ -3,6 +3,7 @@ class CreateSavingGoals < ActiveRecord::Migration[8.1]
     create_table :saving_goals do |t|
       t.string :name, null: false
       t.decimal :amount, null: false
+      t.boolean :autocomplete, null: false, default: false
       t.boolean :done, default: false
       t.boolean :archived, default: false
       t.belongs_to :user, null: false, foreign_key: true
