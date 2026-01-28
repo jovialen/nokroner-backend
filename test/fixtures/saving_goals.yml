@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  amount: 9.99
+  done: false
+  archived: false
+  user: one
+
+two:
+  name: MyString
+  amount: 9.99
+  done: false
+  archived: false
+  user: two

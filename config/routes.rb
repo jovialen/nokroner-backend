@@ -59,6 +59,9 @@ Rails.application.routes.draw do
 
       # While also having a common route for all transactions
       resources :transactions
+
+      # Saving goals
+      resources :saving_goals
     end
   end
 end

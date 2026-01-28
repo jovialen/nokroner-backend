@@ -16,6 +16,9 @@ class User < ApplicationRecord
   before_validation :build_owner_if_needed, on: :create
   before_validation :set_owner_name_from_profile, on: [ :create, :update ]
 
+  # Users can also make saving goals
+  has_many :saving_goals, dependent: :destroy
+
   # Database data dependent on the user, and which should be deleted with the
   # user if its deleted
   has_many :owners, dependent: :destroy
