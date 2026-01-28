@@ -6,6 +6,7 @@ class CreateSavingGoals < ActiveRecord::Migration[8.1]
       t.boolean :done, default: false
       t.boolean :archived, default: false
       t.belongs_to :user, null: false, foreign_key: true
+      t.date :target_date
 
       t.timestamps
     end

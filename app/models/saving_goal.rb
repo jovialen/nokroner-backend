@@ -19,15 +19,46 @@ class SavingGoal < ApplicationRecord
   scope :completed, ->() { where(done: true) }
   scope :archived, ->() { where(archived: true) }
 
+  # @summary How much money the user has saved
+  #
+  # The amount of saved money is equal to the users balance minus the money
+  # reserved by other spending goals. However, if the saving goal has already
+  # been completed, its amount is already included in the reserved amount, so
+  # we can just assume that the user had enough money.
+  #
+  # @return Saved amount.
   def saved
-    # The amount of saved money is equal to the users balance minus the money
-    # reserved by other spending goals. However, if the saving goal has already
-    # been completed, its amount is already included in the reserved amount, so
-    # we can just assume that the user had enough money.
     if done
       amount
     else
       BigDecimal((user.owner.balance - reserved).clamp(0, amount))
+    end
+  end
+
+  # @summary Remaining amount to save
+  # Takes the saving goal amount and subtracts the saved amount.
+  def remaining
+    amount - saved
+  end
+
+  # @summary How much the user must save every day to meet the goal by the target date.
+  #
+  # The amount the user has to save on a daily basis is equal to the remaining amount
+  # divided by the amount of days left to save. If there is no target date, this
+  # function simply returns nil.
+  #
+  # @return Daily required saving amount.
+  def daily_saving
+    if target_date.nil?
+      return nil
+    end
+
+    days = (target_date - Date.today).to_i
+
+    if days > 0
+      amount / days
+    else
+      amount
     end
   end
 

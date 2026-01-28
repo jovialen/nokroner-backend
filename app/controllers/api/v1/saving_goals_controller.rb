@@ -5,8 +5,9 @@ class Api::V1::SavingGoalsController < ApplicationController
   # @auth [bearer, api_key_cookie]
   # @response Success(200) [Array<!SavingGoal>]
   def index
-    render json: SavingGoal.created_by_user.as_json(
-      methods: :saved
+    @saving_goals = SavingGoal.created_by_user.order(:target_date, :updated_at)
+    render json: @saving_goals.as_json(
+      methods: [ :saved, :daily_saving ]
     )
   end
 
@@ -16,7 +17,7 @@ class Api::V1::SavingGoalsController < ApplicationController
   # @response Success(200) [!SavingGoal]
   def show
     render json: @saving_goal.as_json(
-      methods: :saved
+      methods: [ :saved, :daily_saving ]
     )
   end
 
@@ -28,7 +29,7 @@ class Api::V1::SavingGoalsController < ApplicationController
     @saving_goal = Current.user.saving_goals.build(saving_goal_params)
 
     if @saving_goal.save
-      render json: @saving_goal.as_json(methods: :saved), status: :created
+      render json: @saving_goal.as_json(methods: [ :saved, :daily_saving ]), status: :created
     else
       render json: { errors: @saving_goal.errors.full_messages }, status: :unprocessable_entity
     end
@@ -41,7 +42,7 @@ class Api::V1::SavingGoalsController < ApplicationController
   # @response Success(200) [!SavingGoal]
   def update
     if @saving_goal.update(saving_goal_params)
-      render json: @saving_goal.as_json(methods: :saved)
+      render json: @saving_goal.as_json(methods: [ :saved, :daily_saving ])
     else
       render json: { errors: @saving_goal.errors.full_messages }, status: :unprocessable_entity
     end
@@ -63,6 +64,6 @@ class Api::V1::SavingGoalsController < ApplicationController
   end
 
   def saving_goal_params
-    params.expect(saving_goal: [ :name, :amount, :done, :archived ])
+    params.expect(saving_goal: [ :name, :amount, :done, :archived, :target_date ])
   end
 end
