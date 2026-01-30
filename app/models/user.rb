@@ -15,11 +15,15 @@ class User < ApplicationRecord
   validates :owner, presence: true
   before_validation :build_owner_if_needed, on: :create
   before_validation :set_owner_name_from_profile, on: [ :create, :update ]
+  before_destroy :nullify_owner
+
+  # Users can also make saving goals
+  has_many :saving_goals, dependent: :destroy
 
   # Database data dependent on the user, and which should be deleted with the
   # user if its deleted
-  has_many :owners, dependent: :destroy
-  has_many :transactions, dependent: :destroy
+  has_many :owners, dependent: :destroy, foreign_key: :created_by_id
+  has_many :transactions, dependent: :destroy, foreign_key: :created_by_id
 
   private
 
@@ -33,5 +37,9 @@ class User < ApplicationRecord
     if owner.present? && profile.present?
       owner.name = profile.full_name
     end
+  end
+
+  def nullify_owner
+    update_column(:owner_id, nil)
   end
 end

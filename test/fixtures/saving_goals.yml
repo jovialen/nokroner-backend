@@ -1,0 +1,116 @@
+# High priority goals for user one
+high_priority_incomplete:
+  name: Emergency Fund
+  amount: 1000.00
+  priority: 1
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: <%= 30.days.from_now.to_date %>
+  user: one
+
+high_priority_complete:
+  name: New Laptop
+  amount: 500.00
+  priority: 1
+  autocomplete: true
+  done: true
+  archived: false
+  target_date: <%= 10.days.from_now.to_date %>
+  user: one
+
+# Medium priority goals
+medium_priority_incomplete:
+  name: Vacation Fund
+  amount: 300.00
+  priority: 5
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: <%= 60.days.from_now.to_date %>
+  user: one
+
+medium_priority_manual:
+  name: Car Repair
+  amount: 200.00
+  priority: 5
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: <%= 45.days.from_now.to_date %>
+  user: one
+
+# Low priority goals
+low_priority_small:
+  name: New Phone
+  amount: 150.00
+  priority: 10
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: <%= 90.days.from_now.to_date %>
+  user: one
+
+low_priority_large:
+  name: Home Renovation
+  amount: 5000.00
+  priority: 10
+  autocomplete: true
+  done: false
+  archived: false
+  target_date: <%= 365.days.from_now.to_date %>
+  user: one
+
+# Completed and archived goal
+completed_archived:
+  name: Old Goal
+  amount: 250.00
+  priority: 5
+  autocomplete: true
+  done: true
+  archived: true
+  target_date: <%= 30.days.ago.to_date %>
+  user: one
+
+# Goal without target date
+no_target_date:
+  name: Someday Goal
+  amount: 100.00
+  priority: 15
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: null
+  user: one
+
+# Goals for user two (other user)
+other_user_goal:
+  name: Other User Savings
+  amount: 400.00
+  priority: 1
+  autocomplete: true
+  done: false
+  archived: false
+  target_date: <%= 30.days.from_now.to_date %>
+  user: two
+
+other_user_complete:
+  name: Other User Complete
+  amount: 300.00
+  priority: 1
+  autocomplete: true
+  done: true
+  archived: false
+  target_date: <%= 30.days.from_now.to_date %>
+  user: two
+
+# Goal with past target date
+overdue_goal:
+  name: Overdue Goal
+  amount: 100.00
+  priority: 20
+  autocomplete: false
+  done: false
+  archived: false
+  target_date: <%= 5.days.ago.to_date %>
+  user: one

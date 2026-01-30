@@ -16,4 +16,10 @@ class Owner < ApplicationRecord
 
   # Common queries for an owner
   scope :created_by_user, ->() { where(created_by: Current.user) }
+
+  # An important statistic for all owners is their balance, which is the
+  # sum of all their accounts balances.
+  def balance
+    accounts.sum(:balance)
+  end
 end
