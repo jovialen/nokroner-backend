@@ -1,0 +1,4 @@
+one:
+  auth_token: string
+  expires_at: <%= 15.days.from_now %>
+  user: one

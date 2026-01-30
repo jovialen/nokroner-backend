@@ -60,7 +60,7 @@ class Api::V1::SavingGoalsController < ApplicationController
   private
 
   def set_saving_goal
-    @saving_goal = SavingGoal.find(params[:id])
+    @saving_goal = SavingGoal.created_by_user.find(params[:id])
   end
 
   def saving_goal_params

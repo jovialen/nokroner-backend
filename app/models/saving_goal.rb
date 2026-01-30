@@ -79,18 +79,15 @@ class SavingGoal < ApplicationRecord
     # all "where" before it.
     # We also exclude the saving goal which is making the call, as it
     # simplifies the validation.
-    reserved_by_complete = SavingGoal.archived
-                                     .where(id: id)
-                                     .invert_where
-                                     .created_by_user
-                                     .completed
+    reserved_by_complete = SavingGoal.created_by_user
+                                     .where.not(id: id)
+                                     .where(done: true, archived: false)
                                      .sum(:amount)
 
     # Also get the sum of all higher priority saving goals, since this saving
     # goal cannot be saved for before they've been saved for first.
-    reserved_by_priority = SavingGoal.where(id: id)
-                                     .invert_where
-                                     .created_by_user
+    reserved_by_priority = SavingGoal.created_by_user
+                                     .where.not(id: id)
                                      .where(done: false, archived: false)
                                      .where("priority < ?", priority)
                                      .sum(:amount)
@@ -99,7 +96,7 @@ class SavingGoal < ApplicationRecord
   end
 
   def autocomplete_if_possible
-    if autocomplete && ready
+    if autocomplete && amount > 0 && ready
       self.done = true
     end
   end
