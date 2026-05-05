@@ -6,7 +6,7 @@ services:
     env_file:
       - .db.env
     environment:
-      - POSTGRES_DB=nokroner_production
+      - POSTGRES_DB=nokroner_development
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
@@ -34,19 +34,34 @@ services:
     container_name: rails
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     env_file:
       - .env
       - .db.env
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=nokroner_production
+      - POSTGRES_DB=nokroner_development
     ports:
-      - "80:80"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
+    develop:
+      watch:
+        - path: ./app
+          action: sync
+          target: /rails/app
+          initial_sync: true
+        - path: ./config
+          action: sync+restart
+          target: /rails/config
+          initial_sync: true
+        - path: ./db
+          action: sync+restart
+          target: /rails/db
+        - path: Gemfile.lock
+          action: rebuild
 
 volumes:
   pg_data:
