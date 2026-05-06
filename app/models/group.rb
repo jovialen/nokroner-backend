@@ -1,0 +1,20 @@
+class Group < ApplicationRecord
+  belongs_to :created_by, class_name: "User"
+
+  belongs_to :parent, class_name: "Group", optional: true
+  has_many :children, class_name: "Group", foreign_key: "parent_id"
+
+  validate :parent_belongs_to_same_user, if: -> { parent.present? }
+
+  def as_json(options = {})
+    super(options.merge(except: :created_by_id))
+  end
+
+  private
+
+  def parent_belongs_to_same_user
+    unless parent.created_by == created_by
+      errors.add(:parent, "must be created by the same user")
+    end
+  end
+end

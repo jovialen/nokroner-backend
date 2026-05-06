@@ -13,4 +13,7 @@ Rails.application.routes.draw do
   post "auth/login"    => "sessions#create"
   post "auth/refresh"  => "sessions#update"
   delete "auth/logout" => "sessions#destroy"
+
+  # Application
+  resources :groups
 end
