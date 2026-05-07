@@ -16,4 +16,5 @@ Rails.application.routes.draw do
 
   # Application
   resources :groups
+  resources :accounts
 end

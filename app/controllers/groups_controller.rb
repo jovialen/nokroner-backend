@@ -15,7 +15,7 @@ class GroupsController < ApplicationController
   # POST /groups
   def create
     @group = Current.user.all_groups.create!(group_params)
-    render json: @group, status: :created
+    render json: @group, status: :created, location: @group
   end
 
   # PATCH/PUT /groups/1
@@ -32,7 +32,7 @@ class GroupsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
-    @group = Current.user.all_groups.find(params.expect(:id))
+      @group = Current.user.all_groups.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
