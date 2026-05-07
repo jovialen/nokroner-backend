@@ -3,7 +3,8 @@ alias m := monitor
 alias u := up
 alias d := down
 alias r := restart
-alias s := shell
+alias sh := shell
+alias stat := status
 
 watch:
     docker compose -f docker-compose.dev.yml watch
@@ -22,3 +23,6 @@ restart:
 
 shell:
     docker compose exec rails bash
+
+status:
+    docker compose ls && docker compose ps
