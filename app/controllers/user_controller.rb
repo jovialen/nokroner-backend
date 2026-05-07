@@ -4,7 +4,7 @@ class UserController < ApplicationController
   wrap_parameters :user, include: %i[ email_address password password_confirmation ]
 
   def create
-    @user = User.create!(user_params)
+    @user = UserCreationService.call(user_params)
     session = create_new_session_for_user!(@user)
     render json: { refresh_token: session.refresh_token, access_token: session.generate_access_token }, status: :created
   end
