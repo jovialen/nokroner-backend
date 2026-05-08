@@ -14,13 +14,17 @@ class AccountsController < ApplicationController
 
   # POST /accounts
   def create
-    @account = Account.create!(account_params)
-    render json: @account, status: :created, location: @account
+    ApplicationRecord.transaction do
+      @account = Account.create!(account_params)
+      AccountBalanceService.new(@account).update_balance(params[:balance]) if params[:balance]
+      render json: @account, status: :created, location: @account
+    end
   end
 
   # PATCH/PUT /accounts/1
   def update
     @account.update!(account_params)
+    AccountBalanceService.initialize(@account).update_balance(params[:balance]) if params[:balance]
     render json: @account
   end
 
