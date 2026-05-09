@@ -1,4 +1,20 @@
 class AccountBalanceService
+  def self.update_balance(account, to)
+    update_balance_at(account, Date.today, to)
+  end
+
+  def self.update_balance_at(account, date, to)
+    new(account).update_balance_at(date, to)
+  end
+
+  def self.change(account, by)
+    change_at(account, Date.today, by)
+  end
+
+  def self.change_at(account, date, by)
+    new(account).change_at(date, by)
+  end
+
   def initialize(account)
     @account = account
   end
@@ -7,8 +23,10 @@ class AccountBalanceService
     update_balance_at(Date.today, to)
   end
 
-  def update_balance_at(date, balance)
-    delta = balance - @account.balance_at(date)
+  def update_balance_at(date, to)
+    date ||= Date.today
+
+    delta = to - @account.balance_at(date)
     change_at(date, delta)
   end
 
@@ -17,6 +35,8 @@ class AccountBalanceService
   end
 
   def change_at(date, by)
+    date ||= Date.today
+
     ApplicationRecord.transaction requires_new: true do
       @account.balance_snapshots
         .at_or_after(date)

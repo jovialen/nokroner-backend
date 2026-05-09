@@ -1,6 +1,6 @@
 class Account < ApplicationRecord
   belongs_to :owner, class_name: "Group"
-  has_many :balance_snapshots, class_name: "AccountBalanceSnapshot", dependent: :destroy
+  has_many :balance_snapshots, class_name: "AccountBalanceSnapshot", foreign_key: "account_id", dependent: :destroy
 
   validate :owner_belongs_to_user, if: -> { owner.present? }
 
@@ -9,7 +9,7 @@ class Account < ApplicationRecord
   end
 
   def balance_at(date)
-    balance_snapshots.at_or_before(date).take&.balance || 0
+    balance_snapshots.at_or_before(date).order(date: :desc).take&.balance || BigDecimal(0)
   end
 
   def as_json(options = {})

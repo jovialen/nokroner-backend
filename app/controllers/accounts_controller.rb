@@ -16,16 +16,18 @@ class AccountsController < ApplicationController
   def create
     ApplicationRecord.transaction do
       @account = Account.create!(account_params)
-      AccountBalanceService.new(@account).update_balance(params[:balance]) if params[:balance]
+      AccountBalanceService.update_balance(@account, params[:balance]) if params[:balance]
       render json: @account, status: :created, location: @account
     end
   end
 
   # PATCH/PUT /accounts/1
   def update
-    @account.update!(account_params)
-    AccountBalanceService.initialize(@account).update_balance(params[:balance]) if params[:balance]
-    render json: @account
+    ApplicationRecord.transaction do
+      @account.update!(account_params)
+      AccountBalanceService.update_balance(@account, params[:balance]) if params[:balance]
+      render json: @account
+    end
   end
 
   # DELETE /accounts/1
@@ -47,6 +49,7 @@ class AccountsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def account_params
-    params.expect(account: [ :name, :owner_id ])
+    params.permit(:id, :balance, account: [ :name, :owner_id ])
+      .fetch(:account, {})
   end
 end
