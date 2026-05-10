@@ -18,4 +18,5 @@ Rails.application.routes.draw do
   resources :groups
   resources :accounts
   resources :transactions
+  resources :subscriptions
 end

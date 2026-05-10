@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  from_account: one
+  to_account: one
+  amount: 9.99
+  cron: MyString
+  next_run_at: 2026-05-10 22:50:41
+
+two:
+  name: MyString
+  from_account: two
+  to_account: two
+  amount: 9.99
+  cron: MyString
+  next_run_at: 2026-05-10 22:50:41

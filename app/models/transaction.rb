@@ -1,6 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :from, class_name: "Account"
   belongs_to :to, class_name: "Account"
+  belongs_to :subscription, optional: true
 
   validates :to, :from, presence: true, on: :create
   validate :belongs_to_user

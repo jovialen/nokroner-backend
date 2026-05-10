@@ -1,0 +1,4 @@
+production:
+  subscription_processing_job:
+    class: SubscriptionProcessingJob
+    schedule: every day at 12pm

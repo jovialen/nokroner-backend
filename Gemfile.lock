@@ -355,6 +355,7 @@ DEPENDENCIES
   brakeman
   bundler-audit
   debug
+  fugit
   image_processing (~> 1.2)
   jwt (~> 2.5)
   kamal
