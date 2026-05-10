@@ -33,6 +33,7 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1
   def destroy
     @account.destroy!
+    TransactionCleanupJob.perform_later
   end
 
   private
