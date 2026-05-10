@@ -37,7 +37,7 @@ class AccountBalanceService
   def change_at(date, by)
     date ||= Date.today
 
-    ApplicationRecord.transaction requires_new: true do
+    ApplicationRecord.transaction do
       @account.balance_snapshots
         .at_or_after(date)
         .update_all("balance = balance + #{by}")

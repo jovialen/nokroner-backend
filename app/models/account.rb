@@ -2,6 +2,9 @@ class Account < ApplicationRecord
   belongs_to :owner, class_name: "Group"
   has_many :balance_snapshots, class_name: "AccountBalanceSnapshot", foreign_key: "account_id", dependent: :destroy
 
+  has_many :sent_transactions, class_name: "Transaction", foreign_key: "from_id", dependent: :nullify
+  has_many :received_transactions, class_name: "Transaction", foreign_key: "to_id", dependent: :nullify
+
   validate :owner_belongs_to_user, if: -> { owner.present? }
 
   def balance
