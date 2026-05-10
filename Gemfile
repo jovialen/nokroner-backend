@@ -44,6 +44,9 @@ gem "sentry-rails"
 # Use fugit for cron calculations
 gem "fugit"
 
+# Use health_check for *gasp* health checks
+gem "health_check"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

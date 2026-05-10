@@ -1,6 +1,6 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscriptions
-  before_action :set_subscription, only: %i[ show update destroy ]
+  before_action :set_subscription, only: %i[ show show_transactions update destroy ]
 
   # GET /subscriptions
   def index
@@ -10,6 +10,11 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions/1
   def show
     render json: @subscription
+  end
+
+  # GET /subscriptions/1/transactions
+  def show_transactions
+    render json: @subscription.transactions
   end
 
   # POST /subscriptions

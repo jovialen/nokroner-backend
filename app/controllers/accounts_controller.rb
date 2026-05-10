@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_accounts
-  before_action :set_account, only: %i[ show update destroy ]
+  before_action :set_account, only: %i[ show show_history update destroy ]
 
   # GET /accounts
   def index
@@ -10,6 +10,11 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   def show
     render json: @account
+  end
+
+  # GET /accounts/1/history
+  def show_history
+    render json: @account.balance_snapshots
   end
 
   # POST /accounts
