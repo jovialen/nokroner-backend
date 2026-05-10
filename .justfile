@@ -1,5 +1,6 @@
 alias w := watch
 alias m := monitor
+alias l := logs
 alias u := up
 alias d := down
 alias r := restart
@@ -12,6 +13,9 @@ alias mr := migrate_redo
 
 watch:
     docker compose -f docker-compose.dev.yml watch
+
+logs:
+    docker compose logs rails
 
 monitor:
     docker compose logs rails -f
