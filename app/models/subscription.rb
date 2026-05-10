@@ -7,12 +7,13 @@ class Subscription < ApplicationRecord
   before_validation :set_next_run
 
   validate :belongs_to_user
+  validate :valid_cron
 
   def next_transaction
-    Transaction.new(name: "#{name} #{next_run_at.date}",
+    Transaction.new(name: "#{name} #{next_run_at}",
       from: from,
       to: to,
-      date: next_run_at.date,
+      date: next_run_at,
       amount: amount,
       subscription: self
     )
@@ -35,6 +36,14 @@ class Subscription < ApplicationRecord
 
     unless to.present? && to.owner.created_by == Current.user
       errors.add(:to, "must be a valid account")
+    end
+  end
+
+  def valid_cron
+    parsed = Fugit::Cron.parse(cron)
+
+    if parsed.nil?
+      errors.add(:cron, "is not a valid cron expression")
     end
   end
 end
